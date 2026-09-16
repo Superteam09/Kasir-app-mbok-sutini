@@ -10,11 +10,34 @@ scan QR code).
 - **Kasir (POS)** — buat transaksi langsung di tempat, pilih menu, hitung total, catat metode
   pembayaran (tunai/transfer).
 - **Pesanan Online** — daftar pesanan yang masuk dari landing page pelanggan, real-time,
-  dengan tombol ubah status (Menunggu → Dikonfirmasi → Disiapkan → Siap → Selesai) dan tandai
-  sudah/belum bayar.
-- **Kelola Menu** (khusus owner) — atur kategori dan daftar menu beserta harga, deskripsi,
-  gambar, dan status tersedia/habis.
-- **Kelola Staff** (khusus owner) — atur siapa yang berperan sebagai owner/kasir.
+  dengan tombol ubah status (Menunggu → Dikonfirmasi → Disiapkan → Diantar → Selesai) dan
+  tandai sudah/belum bayar. Pelanggan yang sedang membuka halaman status pesanannya akan
+  melihat perubahan status ini secara otomatis, tanpa perlu refresh.
+- **Alamat & foto patokan lokasi** — saat memesan, pelanggan mengisi alamat pengantaran dan
+  boleh melampirkan foto (rumah/gang/patokan) supaya kurir lebih mudah menemukan lokasi.
+- **Live Chat pesanan** — di halaman status pesanan, pelanggan bisa membuka tombol chat
+  mengambang untuk berkirim pesan langsung ke admin tanpa keluar dari halaman. Staff membalas
+  dari menu **Live Chat** di sisi kasir (daftar percakapan per pesanan, realtime, dengan
+  penanda jumlah pesan yang belum dibaca).
+- **Notifikasi pesanan & chat baru** — begitu ada pesanan online atau pesan live chat baru
+  dari pelanggan, staff yang sedang membuka halaman mana pun akan mendengar bunyi notifikasi
+  dan melihat lonceng di pojok kanan atas menyala dengan daftar notifikasinya. Kalau tab
+  browser sedang tidak aktif (dan izin diberikan), notifikasi juga muncul sebagai notifikasi
+  desktop dari browser.
+- **Kelola Menu** — atur kategori dan daftar menu beserta harga, deskripsi, gambar, dan status
+  tersedia/habis. Owner selalu bisa akses; kasir bisa diberi akses ke menu ini juga lewat
+  **Izin Akses per Staff** di bawah.
+- **Kelola Staff** (khusus owner) — hanya owner yang bisa membuat akun staff baru (langsung
+  dari panel ini, staff tidak perlu daftar sendiri lagi), mengatur role owner/kasir, mengirim
+  link reset password ke staff, dan menghapus akun yang sudah tidak dipakai.
+- **Izin Akses per Staff** (khusus owner, bagian dari menu **Staff**) — owner bisa mengatur
+  menu apa saja yang boleh dibuka tiap akun kasir (misalnya cuma **Kasir (POS)** saja, atau
+  **Kasir** + **Menu**), baik saat membuat akun baru maupun kapan saja lewat tombol
+  **Atur Akses** di daftar staff. Menu **Staff** dan **Pengaturan** selalu khusus Owner, tidak
+  pernah bisa diberikan ke kasir mana pun. Kalau tidak diatur sama sekali, akun kasir tetap
+  bisa akses semua menu selain dua itu (perilaku default, sama seperti sebelumnya).
+- **Lupa Password** — di halaman Login ada link "Lupa password?" untuk kirim link reset ke
+  email yang terdaftar (berlaku untuk owner maupun kasir).
 - **Link & QR** — halaman untuk mendapatkan link pemesanan online dan QR code yang bisa
   dicetak/ditempel di meja.
 - **Landing page pelanggan** (`/order`, tanpa login) — pelanggan lihat menu, pilih barang,
@@ -24,6 +47,28 @@ scan QR code).
   sekaligus perkiraan dalam Riel di semua layar (kasir, pesanan online, halaman pelanggan),
   misalnya `$4.00 (~16.400៛)`. Kursnya diatur owner di halaman **Pengaturan** dan langsung
   berlaku ke semua layar tanpa perlu deploy ulang.
+- **Logo Restoran** — owner bisa upload logo dari halaman **Pengaturan**, langsung tampil di
+  halaman login, halaman pemesanan pelanggan, halaman status pesanan, dan sidebar staff —
+  menggantikan tampilan default (ikon/nama saja). Bisa diganti atau dihapus kapan saja tanpa
+  perlu deploy ulang.
+- **Nama Toko/Resto bisa diubah** — owner bisa mengganti nama toko kapan saja dari halaman
+  **Pengaturan**, tanpa perlu deploy ulang. Nama baru langsung berlaku di halaman login,
+  halaman pemesanan pelanggan, status pesanan, sidebar staff, dan judul tab browser.
+- **Tampilan staff baru (lebih modern)** — semua halaman staff (Dashboard, Kasir, Pesanan
+  Online, Menu, Staff, Live Chat, Pengaturan) memakai tampilan terang bergaya kartu dengan
+  sidebar gelap sebagai aksen, kartu statistik berikon di Dashboard, dan tampilan produk
+  bergambar di halaman Kasir — warna oranye/coklat khas resto tetap dipertahankan.
+- **Retur & Batalkan transaksi** — kalau ada kesalahan input atau barang dikembalikan
+  customer:
+  - Di halaman **Kasir (POS)**, bagian "Riwayat Transaksi Kasir Hari Ini" punya tombol
+    **Batalkan** (transaksi salah/tidak jadi) dan **Retur** (barang sudah dibawa tapi
+    dikembalikan) untuk tiap transaksi yang sudah selesai.
+  - Di halaman **Pesanan Online**, pesanan yang statusnya "Selesai" bisa ditandai **Retur**,
+    dan pesanan yang masih berjalan bisa **Dibatalkan** (tombol Batalkan yang sudah ada
+    sebelumnya). Ada juga tab filter baru **Retur** untuk melihat daftar pesanan yang
+    diretur.
+  - Transaksi/pesanan yang sudah Retur atau Dibatalkan otomatis tidak dihitung ke dalam
+    "Penjualan selesai hari ini" di Dashboard.
 
 Pembayaran pada versi ini **manual** (tunai/transfer, dikonfirmasi langsung oleh kasir) —
 belum terhubung ke payment gateway.
@@ -39,10 +84,32 @@ belum terhubung ke payment gateway.
 
 ---
 
-> **Sudah pernah deploy sebelum ada fitur mata uang Riel?** Anda tidak perlu mengulang dari
-> awal. Cukup buka project Supabase yang sudah ada → **SQL Editor** → **New query** → salin isi
-> file `supabase/tambahan-kurs-riel.sql` dari paket ini → **Run**. Lalu unggah ulang kode
-> terbaru ke GitHub (Tahap 3) dan Netlify akan otomatis deploy ulang.
+> **Sudah pernah deploy sebelumnya?** Anda tidak perlu mengulang dari awal. Cukup buka project
+> Supabase yang sudah ada → **SQL Editor** → **New query**, lalu jalankan (satu per satu,
+> **Run** setiap selesai salin satu file) file-file tambahan yang belum pernah dijalankan:
+> - `supabase/tambahan-kurs-riel.sql` (fitur mata uang Riel)
+> - `supabase/tambahan-foto-lokasi.sql` (fitur alamat & foto patokan lokasi pengantaran)
+> - `supabase/tambahan-live-chat.sql` (fitur live chat pelanggan ↔ admin)
+> - `supabase/tambahan-kelola-akun.sql` (hanya owner bisa buat akun staff + lupa password)
+> - `supabase/tambahan-logo.sql` (fitur upload logo restoran di halaman Pengaturan)
+> - `supabase/tambahan-nama-toko.sql` (fitur ganti nama toko di halaman Pengaturan)
+> - `supabase/tambahan-retur.sql` (fitur status "Retur" untuk transaksi/pesanan)
+> - `supabase/tambahan-izin-akses-staff.sql` (fitur izin akses menu per-akun kasir)
+> - `supabase/tambahan-aktifkan-realtime.sql` (**PENTING** — tanpa ini, status pesanan pelanggan,
+>   live chat, dan notifikasi lonceng/badge staff TIDAK akan pernah otomatis update; pelanggan/staff
+>   harus refresh manual dulu baru lihat data terbaru)
+> - `supabase/tambahan-tutup-chat.sql` (fitur "Akhiri Percakapan" di halaman Live Chat staff,
+>   supaya percakapan yang sudah selesai bisa dipindah ke tab Riwayat)
+>
+> (Fitur tampilan staff baru, notifikasi bunyi/lonceng untuk pesanan/chat baru, dan fitur "Cek
+> Pesanan Saya" untuk pelanggan tidak butuh migrasi SQL apa pun — otomatis aktif begitu kode
+> terbarunya di-deploy.)
+>
+> Kalau Anda menjalankan `tambahan-kelola-akun.sql`, JUGA perlu deploy Edge Function
+> `admin-users` sekali (lihat bagian **6. Mengaktifkan Kelola Staff** di bawah) supaya tombol
+> "Tambah Staff" & "Hapus Akun" berfungsi.
+>
+> Lalu unggah ulang kode terbaru ke GitHub (Tahap 3) dan Netlify akan otomatis deploy ulang.
 
 ## 1. Membuat Project Supabase (Database + Login)
 
@@ -96,7 +163,8 @@ perintah teknis:
 4. Sebelum klik deploy, buka bagian **Environment variables**, tambahkan satu per satu:
    - `NEXT_PUBLIC_SUPABASE_URL` = Project URL dari Supabase
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = anon public key dari Supabase
-   - `NEXT_PUBLIC_RESTO_NAME` = nama restoran Anda (tampil di judul & landing page)
+   - `NEXT_PUBLIC_RESTO_NAME` = nama restoran Anda (nama awal — bisa diganti kapan saja nanti
+     dari menu **Pengaturan** tanpa perlu deploy ulang)
 5. Klik **Deploy**. Setelah selesai (1-3 menit), Netlify memberi Anda link publik, misalnya
    `https://nama-resto.netlify.app` — inilah alamat aplikasi Anda yang online.
 6. (Opsional) Di **Site configuration → Domain management** Anda bisa menyambungkan domain
@@ -105,17 +173,50 @@ perintah teknis:
 ## 5. Membuat Akun Owner Pertama
 
 1. Buka `https://nama-resto.netlify.app/login`.
-2. Klik tab **Daftar Akun Baru**, isi nama, email, password → **Buat Akun**.
-   Akun **pertama** yang mendaftar otomatis menjadi **Owner**.
+2. Klik tab **Daftar Akun Baru** (tab ini otomatis hilang setelah akun owner pertama ada —
+   normal, bukan bug), isi nama, email, password → **Buat Akun**. Akun **pertama** yang
+   mendaftar otomatis menjadi **Owner**.
 3. Login. Anda akan masuk ke Dashboard.
-4. Untuk menambah kasir: minta staff mendaftar sendiri di halaman yang sama dengan
-   email/password yang Anda tentukan — akun mereka otomatis berperan **Kasir**. Anda bisa
-   mengelola/ubah role di menu **Staff**.
-5. Buka menu **Pengaturan**, cek/atur kurs 1 USD berapa Riel (default 4.100). Ini yang
+4. Buka menu **Pengaturan**, cek/atur kurs 1 USD berapa Riel (default 4.100). Ini yang
    dipakai untuk menampilkan harga dalam Riel di semua layar. Bisa diubah kapan saja sesuai
    kurs yang berlaku.
 
-## 6. Mengisi Menu & Membagikan Link Pemesanan
+## 6. Mengaktifkan Kelola Staff (supaya owner bisa buat akun staff baru)
+
+Setelah owner pertama dibuat, pendaftaran akun baru **otomatis tertutup** — hanya owner yang
+bisa membuat akun staff baru, lewat menu **Staff**. Supaya tombol "Tambah Staff" & "Hapus
+Akun" di menu itu berfungsi, perlu satu langkah setup tambahan **satu kali saja**: men-deploy
+sebuah "Edge Function" (kode kecil yang jalan aman di sisi server Supabase, bukan di browser
+— dibutuhkan karena membuat akun butuh kunci rahasia yang tidak boleh pernah ada di kode
+website). Ini pakai Command Prompt/Terminal, tapi cuma 4 perintah:
+
+1. Buka Command Prompt (Windows) atau Terminal (Mac), lalu pindah ke folder hasil extract
+   zip aplikasi ini, misalnya:
+   ```bash
+   cd Downloads/kasir-app
+   ```
+2. Install Supabase CLI (sekali saja per komputer):
+   ```bash
+   npm install -g supabase
+   ```
+3. Login ke akun Supabase Anda (akan membuka browser, klik izinkan):
+   ```bash
+   supabase login
+   ```
+4. Deploy function-nya — ganti `XXXXXXXX` dengan **Reference ID** project Supabase Anda
+   (dilihat di dashboard Supabase → **Project Settings → General**, tepat di bawah nama
+   project):
+   ```bash
+   supabase functions deploy admin-users --project-ref XXXXXXXX
+   ```
+5. Kalau muncul tulisan "Deployed Function", berarti berhasil. Coba buka menu **Staff** di
+   aplikasi, klik **+ Tambah Staff**, isi data staff baru, lalu **Buat Akun** — sampaikan
+   email & password yang tampil ke staff yang bersangkutan.
+
+Tidak perlu mengulang langkah ini lagi di masa depan kecuali kode `supabase/functions/admin-users`
+berubah lagi (kalau begitu, cukup ulangi langkah 4 saja).
+
+## 7. Mengisi Menu & Membagikan Link Pemesanan
 
 1. Masuk ke menu **Menu**, tambahkan kategori (mis. Makanan Utama, Minuman) lalu tambahkan
    item menu beserta harga.
@@ -124,6 +225,10 @@ perintah teknis:
 3. Pelanggan yang membuka link/scan QR akan melihat menu, bisa memesan, lalu mendapat
    halaman status pesanan yang otomatis ter-update.
 4. Pesanan yang masuk akan langsung muncul di menu **Pesanan Online** milik staff.
+5. (Opsional) Masuk ke menu **Pengaturan**, upload logo resto di bagian **Logo Restoran**
+   supaya tampil di halaman login, halaman pemesanan pelanggan, dan sidebar staff.
+6. (Opsional) Di menu **Pengaturan** juga ada bagian **Nama Toko/Resto** kalau Anda mau
+   mengganti nama yang tampil di aplikasi tanpa perlu deploy ulang.
 
 ---
 
@@ -139,15 +244,25 @@ perintah teknis:
   mengaktifkan kembali (perlu dilakukan manual, aplikasi tidak bisa membangunkannya sendiri).
 - **Pembayaran manual** — belum ada integrasi payment gateway. Pelanggan memesan dulu,
   bayar tunai/transfer dikonfirmasi langsung oleh kasir.
+- **Notifikasi pesanan/chat baru hanya aktif selagi ada staff yang membuka aplikasi di
+  browser** (tab boleh di-minimize/pindah tab lain, notifikasi desktop browser tetap muncul
+  kalau izinnya sudah diberikan) — belum berupa notifikasi ke HP lewat WhatsApp/Telegram
+  atau saat browser benar-benar tertutup, karena itu perlu layanan pihak ketiga berbayar.
+  Disarankan salah satu HP/komputer kasir selalu login & membuka aplikasi selama jam buka.
 - **Halaman status pesanan** dapat diakses siapa pun yang memegang link/kode pesanannya
   (tidak perlu login) — praktis untuk pelanggan, tapi berarti link tersebut sebaiknya
   tidak disebar sembarangan. Cukup aman untuk kebutuhan v1 karena isinya hanya rincian
   pesanan makanan.
-- **Penambahan staff** dilakukan lewat pendaftaran mandiri (self sign-up) + owner mengatur
-  rolenya — dipilih supaya tidak perlu menyimpan kunci rahasia (service role key) di
-  aplikasi yang online. Jika ke depan ingin owner bisa membuat akun staff langsung dari
-  dashboard (tanpa staff mendaftar sendiri), ini bisa ditambahkan lewat Supabase Edge
-  Function.
+- **Penambahan staff** hanya bisa dilakukan owner lewat menu **Staff** (lihat langkah 6) —
+  pendaftaran mandiri (self sign-up) otomatis tertutup begitu akun owner pertama ada, supaya
+  orang lain tidak bisa membuat akun stafnya sendiri. Ini butuh satu Supabase Edge Function
+  kecil (`admin-users`) yang di-deploy sekali lewat Command Prompt/Terminal — lihat langkah 6
+  untuk caranya.
+- **Lupa password** ditangani lewat email reset bawaan Supabase (gratis, tanpa setup SMTP
+  tambahan) — cukup andalkan link "Lupa password?" di halaman Login. Kalau owner sendiri
+  lupa password DAN tidak bisa akses emailnya juga, satu-satunya jalan adalah reset manual
+  lewat Supabase Dashboard → **Authentication → Users** → pilih user → **Send password
+  recovery** atau **Reset password**.
 - Struktur database sudah disiapkan untuk berkembang: menambah meja/nomor antrian, laporan
   penjualan lebih lengkap, cetak struk, hingga integrasi payment gateway (mis. ABA PayWay)
   bisa dibangun di atas skema yang sama.
@@ -156,10 +271,13 @@ perintah teknis:
 
 ```
 app/
-  (staff)/         halaman staff yang perlu login (dashboard, pos, orders, menu, staff, share)
-  order/           landing page pelanggan (public) + halaman status pesanan
-  login/           halaman login & daftar staff
-components/        komponen UI bersama (navigasi staff)
-lib/               helper Supabase, tipe data, format angka/tanggal
-supabase/schema.sql  skrip SQL untuk membuat semua tabel & aturan keamanan
+  (staff)/            halaman staff yang perlu login (dashboard, pos, orders, chat, menu, staff, share, settings)
+  order/              landing page pelanggan (public) + halaman status pesanan
+  login/               halaman login, daftar staff (setup awal), & lupa password
+  reset-password/      halaman atur password baru (dibuka dari link email reset)
+  auth/callback/        penukar link email jadi sesi login (dipakai alur reset password)
+components/            komponen UI bersama (navigasi staff, widget chat, dll)
+lib/                   helper Supabase, tipe data, format angka/tanggal
+supabase/schema.sql    skrip SQL untuk membuat semua tabel & aturan keamanan
+supabase/functions/    Edge Function admin-users (buat/hapus akun staff, lihat langkah 6)
 ```

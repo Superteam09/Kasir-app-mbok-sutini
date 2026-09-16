@@ -1,5 +1,9 @@
 [build]
   command = "npm run build"
+  # Ditulis eksplisit di sini supaya tidak bentrok dengan kolom "Publish
+  # directory" di halaman pengaturan Netlify (yang kadang otomatis terisi
+  # nilai yang salah dan menyebabkan error "publish directory cannot be
+  # the same as the base directory").
   publish = ".next"
 
 [build.environment]
