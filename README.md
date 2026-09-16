@@ -103,6 +103,10 @@ belum terhubung ke payment gateway.
 > - `supabase/tambahan-foto-menu.sql` (fitur upload foto menu langsung dari komputer/HP di halaman
 >   Menu, menggantikan kolom URL Gambar manual — **jalankan setelah** `tambahan-izin-akses-staff.sql`
 >   di atas, karena migrasi ini memakainya)
+> - `supabase/tambahan-promo.sql` (fitur slide iklan/promo — FOTO ATAU VIDEO — di halaman status
+>   pesanan pelanggan, diatur dari menu Pengaturan → Iklan/Promo. Sudah pernah menjalankan versi
+>   lama file ini sebelum ada dukungan video? Aman dijalankan ulang, tidak akan menghapus promo
+>   yang sudah ada)
 >
 > (Fitur tampilan staff baru, notifikasi bunyi/lonceng untuk pesanan/chat baru, dan fitur "Cek
 > Pesanan Saya" untuk pelanggan tidak butuh migrasi SQL apa pun — otomatis aktif begitu kode
