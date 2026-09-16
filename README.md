@@ -100,6 +100,9 @@ belum terhubung ke payment gateway.
 >   harus refresh manual dulu baru lihat data terbaru)
 > - `supabase/tambahan-tutup-chat.sql` (fitur "Akhiri Percakapan" di halaman Live Chat staff,
 >   supaya percakapan yang sudah selesai bisa dipindah ke tab Riwayat)
+> - `supabase/tambahan-foto-menu.sql` (fitur upload foto menu langsung dari komputer/HP di halaman
+>   Menu, menggantikan kolom URL Gambar manual — **jalankan setelah** `tambahan-izin-akses-staff.sql`
+>   di atas, karena migrasi ini memakainya)
 >
 > (Fitur tampilan staff baru, notifikasi bunyi/lonceng untuk pesanan/chat baru, dan fitur "Cek
 > Pesanan Saya" untuk pelanggan tidak butuh migrasi SQL apa pun — otomatis aktif begitu kode
